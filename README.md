@@ -1,2 +1,2 @@
 # Digital_Thermometer
-Project base on Arduino Framework
+Project Digital Thermometer Base on Arduino Framework
