@@ -35,7 +35,6 @@ class DFPlayer{
   public:
     uint8_t pinMask;
     uint8_t *port;
-    uint8_t busy;
     
     DFPlayer(Stream *serial, unsigned char pinBusy = 255);
     void init();
@@ -69,7 +68,6 @@ DFPlayer::DFPlayer(Stream *serial, unsigned char pinBusy){
     this->pinMask = 0;
     this->port = NULL;
   }
-  busy = false;
 }
 
 void DFPlayer::init(){

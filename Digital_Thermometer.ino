@@ -3,10 +3,17 @@
 #include <Wire.h>
 #include "TemperatureSensor.hpp" 
 #include "DFPlayer.hpp"
+#include <EEPROM.h>
+
+#define Button_Reading_Pin    2
+#define Button_Speaker_Pin    3
+#define DFPlayer_Busy_Pin     7
+
+#define ADDRESS_SOUNDACTIVATED    0
 
 unsigned long Interface_timeOut = 0;
+unsigned char step = 0;
 SoftwareSerial dfplayerSerial(9, 8);
-
 DFPlayer voice(&dfplayerSerial, 7);
 
 void playVoice();
@@ -17,18 +24,31 @@ void setup() {
   dfplayerSerial.begin(9600);
   Interface_init(&lcd);
   voice.init();
-  delay(5);
-  playVoice(14.3);
+  soundActivated = EEPROM.read(ADDRESS_SOUNDACTIVATED) > 0 ? 1 : 0;
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
   if (millis() - Interface_timeOut > 500) {
     Interface_timeOut = millis();
-    Interface_loop();
-    Temperature_Sensor_value = mlx.readAmbientTempC();
+    switch(step){
+      case 0:
+        Interface_loop();
+        step++;
+        break;
+      default:
+        Temperature_Sensor_value = mlx.readAmbientTempC();
+        Temperature_Sensor_value = isnan(Temperature_Sensor_value) ? 0.0 : Temperature_Sensor_value;
+        Temperature_Sensor_value = Temperature_Sensor_value > 99.9 ? 99.9 : Temperature_Sensor_value;
+        step = 0;
+        break;
+    }
   }
-  soundActivated = 0;
+  if(Serial.available()){
+    if(Serial.read() == 'a'){
+      playVoice(Temperature_Sensor_value);
+    }
+  }
 }
 
 void playVoice(float num){
@@ -60,6 +80,8 @@ void playVoice(float num){
      else if(i == 0){
       parse[0] -= 2;
       voice.play(9-parse[0]);
+      if(parse[1] == 0)
+        i++;
      }
      else{
       voice.play(29 - parse[i > 2 ? 2 : i]);

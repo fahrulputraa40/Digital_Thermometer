@@ -8,7 +8,7 @@
 #include "Localization.hpp"
 #include "TemperatureSensor.hpp"
 
-unsigned char soundActivated;
+unsigned int soundActivated;
 
 U8GLIB_SSD1306_128X64 lcd(U8G_I2C_OPT_NONE | U8G_I2C_OPT_DEV_0);
 GadgetDisplay gd(&lcd);
@@ -46,7 +46,7 @@ void Interface_loop() {
      break;
     default:// main display
       Interface_mainDisplayLoop();
-      Interface_page = 1;
+//      Interface_page = 1;
       break;
   }
 
@@ -58,7 +58,7 @@ void Interface_mainDisplayLoop() {
   strcpy_P(buffer, (char *)pgm_read_word(&(lang[Temperature])));
   gd.setTitle(buffer);
   strcpy_P(buffer, (char *)pgm_read_word(&(lang[Read])));
-  gd.setValue(buffer, "30.0", 0xB0);
+  gd.setValue(buffer, dtostrf(Temperature_Sensor_value,2,1,buf), 0xB0);
   gd.draw();
 }
 
@@ -66,10 +66,10 @@ void Interface_menuDisplay() {
   char menu[3][21];
   char sound[5];
   char **listMenu, *listMenu_[3];
-  strcpy_P(menu[0], (char *)pgm_read_word(&(lang[Calibration])));
-  strcpy_P(menu[1], (char *)pgm_read_word(&(lang[Sound])));
+  strcpy_P(menu[1], (char *)pgm_read_word(&(lang[Calibration])));
+  strcpy_P(menu[0], (char *)pgm_read_word(&(lang[Sound])));
   strcpy_P(sound, soundActivated == 1 ?(char *)pgm_read_word(&(lang[Sound_on])) : (char *)pgm_read_word(&(lang[Sound_on])));
-  sprintf(menu[1], menu[1], sound);
+  sprintf(menu[0], menu[0], sound);
   strcpy_P(menu[2], (char *)pgm_read_word(&(lang[Back])));
   listMenu_[0] = menu[0];
   listMenu_[1] = menu[1];
