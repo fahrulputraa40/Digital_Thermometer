@@ -7,7 +7,8 @@
 #include "GadgetMenu.hpp"
 #include "Localization.hpp"
 #include "TemperatureSensor.hpp"
-#include "DFPlayer.hpp"
+
+unsigned char soundActivated;
 
 U8GLIB_SSD1306_128X64 lcd(U8G_I2C_OPT_NONE | U8G_I2C_OPT_DEV_0);
 GadgetDisplay gd(&lcd);

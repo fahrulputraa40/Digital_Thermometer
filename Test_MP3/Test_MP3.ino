@@ -76,13 +76,17 @@ void loop () {
       playPrevious();
     }
   }
+
+  if(c == 'D'){
+    playNUM(2);
+  }
 }
 
 void playFirst()
 {
   execute_CMD(0x3F, 0, 0);
   delay(500);
-  setVolume(20);
+  setVolume(10);
   delay(500);
   execute_CMD(0x11, 0, 1);
   delay(500);
@@ -116,6 +120,11 @@ void setVolume(int volume)
 {
   execute_CMD(0x06, 0, volume); // Set the volume (0x00~0x30)
   delay(2000);
+}
+
+void playNUM(unsigned long num){
+  execute_CMD(0x03, (num & 0xFF00)>>8, num & 0xFF);
+  delay(500);
 }
 
 void execute_CMD(byte CMD, byte Par1, byte Par2)
