@@ -55,6 +55,10 @@ class GadgetMenu {
     unsigned char position(){
       return this->positionMenu;
     }
+
+    void setPos(unsigned char pos){
+      this->positionMenu = pos;
+    }
 };
 
 void GadgetMenu::drawMenu()

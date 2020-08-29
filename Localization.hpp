@@ -12,7 +12,7 @@
 #define Read                    6
 
 const char CALIBRATION[] PROGMEM = "Calibration";
-const char SOUND[] PROGMEM = "Sound: %s";
+const char SOUND[] PROGMEM = "Sound:%s";
 const char BACK[] PROGMEM = "Back";
 const char SOUND_ON[] PROGMEM = "ON";
 const char SOUND_OFF[] PROGMEM = "OFF";
